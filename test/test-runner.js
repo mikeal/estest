@@ -29,7 +29,7 @@ export default t => {
     await runner({ filename: join(fixture, 'noop.js'), onStart, onEnd })
     await done
     same(xStart, true)
-    same(xFail, true)
+    same(xFail, false)
     same(xPass, true)
     console.log('blah')
   })
