@@ -12,5 +12,8 @@
   "license": "(Apache-2.0 AND MIT)",
   "devDependencies": {
     "standard": "^14.3.4"
+  },
+  "dependencies": {
+    "yargs": "^15.4.0"
   }
 }

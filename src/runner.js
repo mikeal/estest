@@ -1,3 +1,5 @@
+import { pathToFileURL } from 'url'
+
 const runner = async api => {
   let { filename, onStart, onEnd, pipe } = api
   if (!pipe) pipe = x => x
@@ -15,7 +17,9 @@ const runner = async api => {
       return pipe(new TestNode({ ...this, name, parent: this }))
     }
   }
-  const module = await import(filename)
+  if (!filename) throw new Error('No filename')
+  const url = pathToFileURL(filename)
+  const module = await import(url)
   if (!module.default) module.default = module.test
   if (module.default) {
     await module.default((name, fn) => pipe(new TestNode({ name, fn, filename })))
@@ -51,13 +55,4 @@ const runner = async api => {
   }
 }
 
-const onEnd = async node => {
-  console.log('runner', 'onEnd', node.name)
-}
-const onStart = async node => {
-  node.onPass = () => console.log('node', 'onPass', node.name)
-  node.onFail = () => console.log('node', 'onFail', node.name)
-  console.log('runner', 'onStart', node.name)
-}
-
-runner({ filename: './test.js', onStart, onEnd })
+export default runner
