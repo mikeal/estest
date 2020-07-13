@@ -10,7 +10,11 @@ const runner = async api => {
     test.fn = fn
     test.filename = filename
     test.parent = parent
-    pending.push(test)
+    if (parent) {
+      pending.splice(pending.indexOf(parent), 0, test)
+    } else {
+      pending.push(test)
+    }
     return pipe(test)
   }
   if (!filename) throw new Error('No filename')
@@ -45,9 +49,12 @@ const runner = async api => {
     }
     if (!threw) await node.onPass()
     await onEnd(node)
+    pending.splice(pending.indexOf(node), 1)
   }
   while (pending.length) {
-    await Promise.all(pending.splice(0, concurrency).map(_run))
+    const chunk = pending.slice(0, concurrency)
+    await Promise.all(chunk.map(_run))
+    concurrency = 1
   }
 }
 
