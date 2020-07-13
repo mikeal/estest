@@ -10,10 +10,8 @@ const same = deepStrictEqual
 
 const fixture = join(__dirname, 'fixture')
 
-export default t => {
-  console.log('asdf')
-  t('basic runner', async test => {
-    console.log('yup')
+const testRunner = async test => {
+  test('basic runner', async test => {
     let xStart = false
     let xFail = false
     let xPass = false
@@ -23,15 +21,37 @@ export default t => {
     })
     const onStart = async node => {
       xStart = true
-      node.onPass = () => xPass = true
-      node.onFail = () => xFail = true
+      node.onPass = () => { xPass = true }
+      node.onFail = () => { xFail = true }
     }
     await runner({ filename: join(fixture, 'noop.js'), onStart, onEnd })
     await done
     same(xStart, true)
     same(xFail, false)
     same(xPass, true)
-    console.log('blah')
+  })
+
+  test('testName', test => {
+    same(test.testName, 'testName')
+  })
+  test('nested', test => {
+    same(test.testName, 'nested')
+    let nestedComplete = false
+    test('one', test => {
+      same(test.testName, 'one')
+      same(test.parent.testName, 'nested')
+      test('one-two', test => {
+        same(test.testName, 'one-two')
+        same(test.parent.testName, 'one')
+        same(test.parent.parent.testName, 'nested')
+        nestedComplete = true
+      })
+    })
+    test('oneCompleted', test => {
+      same(nestedComplete, true)
+    })
   })
 }
 
+const concurrency = 1
+export { testRunner as test, concurrency }
