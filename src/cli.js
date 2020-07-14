@@ -23,7 +23,7 @@ export default async argv => {
   const errors = []
   const runFile = async filename => {
     const opts = await run(filename)
-    await ring(runner({ ...opts, stdout, cwd}))
+    await ring(runner({ ...opts, stdout, cwd }))
     if (opts.errors) {
       opts.errors.forEach(e => errors.push(e))
     }
