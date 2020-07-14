@@ -15,7 +15,9 @@ npx estest test/test-*.js
 
 ### Running in Deno
 
+```
 deno run --allow-read https://raw.githubusercontent.com/mikeal/estest/master/deno.js test/test-*.js
+```
 
 ## Test Authoring
 
