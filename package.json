@@ -1,13 +1,13 @@
 {
   "name": "estest",
-  "version": "10.0.0",
+  "version": "0.0.0-dev",
   "description": "",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "test:node": "node cli.js test/test-*.js",
     "test:deno": "deno run --allow-read deno.js test/test-runner-concurrent.js",
-    "test": "standard && npm run test:node && npm run test:deno"
+    "test": "standard && npm run test:node"
   },
   "keywords": [],
   "author": "Mikeal Rogers <mikeal.rogers@gmail.com> (https://www.mikealrogers.com/)",
