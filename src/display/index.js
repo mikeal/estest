@@ -6,17 +6,12 @@ const green = (...args) => join(style.fg.Green, ...args, style.Reset)
 const white = (...args) => join(style.fg.White, ...args, style.Reset)
 const magenta = (...args) => join(style.fg.Magenta, ...args, style.Reset)
 
-let { rows, columns } = process.stdout
-process.stdout.on('resize', () => {
-  rows = process.stdout.rows
-  columns = process.stdout.columns
-})
-
 const lines = {}
 
 const display = argv => async filename => {
+  const { stdout, cwd } = argv
   const write = async line => {
-    if (!process.stdout.isTTY || argv.debug) {
+    if (argv.debug || !stdout.isTTY) {
       const status = [
         `started: ${white(line.started)}`,
         `passed: ${green(line.passed)}`,
@@ -24,8 +19,9 @@ const display = argv => async filename => {
       ]
       console.log(`${line.prefix}(${status.join(', ')})`)
     } else {
+      display.cleanup = () => console.log('')
       const c = { started: 0, passed: 0, failed: 0 }
-      const started = Object.values(lines).forEach(l => {
+      Object.values(lines).forEach(l => {
         c.started += l.started
         c.passed += l.passed
         c.failed += l.failed
@@ -35,10 +31,10 @@ const display = argv => async filename => {
         `passed: ${green(c.passed)}`,
         `failed: ${red(c.failed)}`
       ]
-      process.stdout.cursorTo(0)
+      stdout.cursorTo(0)
       const prefix = white('estest') + magenta(': ')
       await new Promise(resolve => {
-        process.stdout.write(`${prefix}(${status.join(', ')})`, resolve)
+        stdout.write(`${prefix}(${status.join(', ')})`, resolve)
       })
     }
   }
@@ -72,8 +68,7 @@ const display = argv => async filename => {
   }
   await write(line)
   lines[filename] = line
-  return { filename, onStart, onEnd, errors }
+  return { filename, onStart, onEnd, errors, cwd, stdout }
 }
-display.cleanup = () => process.stdout.write('\n')
 
 export default display

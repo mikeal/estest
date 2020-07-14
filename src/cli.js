@@ -5,7 +5,7 @@ import defaultDisplay from './display/index.js'
 const concurrency = 100
 
 export default async argv => {
-  const { files } = argv
+  const { files, stdout, cwd } = argv
   if (!files) throw new Error('No test files')
   let display = defaultDisplay
   if (argv.b) {
@@ -23,7 +23,7 @@ export default async argv => {
   const errors = []
   const runFile = async filename => {
     const opts = await run(filename)
-    await ring(runner(opts))
+    await ring(runner({ ...opts, stdout, cwd}))
     if (opts.errors) {
       opts.errors.forEach(e => errors.push(e))
     }
@@ -34,7 +34,7 @@ export default async argv => {
     await runFile(files.shift())
   }
   await Promise.all([...pending])
-  if (display.cleanup) await display.cleanup()
+  if (display.cleanup) await display.cleanup(argv)
   if (errors.length) {
     console.error(errors.join('\n'))
     process.exit(1)

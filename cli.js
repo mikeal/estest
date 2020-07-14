@@ -12,5 +12,7 @@ const options = yargs => {
   })
 }
 
-/* eslint ignore next */
-const argv = yargs.command('$0 [files..]', 'Run test files', options, run).argv
+const _run = argv => run({...argv, stdout: process.stdout, cwd: process.cwd() })
+
+/* eslint-disable-next-line */
+const argv = yargs.command('$0 [files..]', 'Run test files', options, _run).argv

@@ -1,14 +1,6 @@
-import runner from '../src/runner.js'
-import { deepStrictEqual } from 'assert'
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-
-const same = deepStrictEqual
-
-const fixture = join(__dirname, 'fixture')
+const same = (x, y) => {
+  if (x !== y) throw new Error(`${x} does not equal ${y}`)
+}
 
 export default async test => {
   const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
