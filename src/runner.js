@@ -5,7 +5,7 @@ const runner = async api => {
   if (!pipe) pipe = x => x
   const pending = []
   const create = ({ name, fn, filename, parent }) => {
-    const test = (name, fn) => create({name, fn, filename, parent: test})
+    const test = (name, fn) => create({ name, fn, filename, parent: test })
     test.testName = name
     test.fn = fn
     test.filename = filename
@@ -19,7 +19,7 @@ const runner = async api => {
   }
   if (!filename) throw new Error('No filename')
   const url = pathToFileURL(filename)
-  const module = { ... await import(url) }
+  const module = { ...await import(url) }
   if (!module.default) module.default = module.test
   if (module.default) {
     await module.default((name, fn) => create({ name, fn, filename }))
@@ -34,8 +34,7 @@ const runner = async api => {
   }
 
   let { concurrency } = module
-  if (concurrency === true) concurrency = api.concurrency || 100
-  else concurrency = 1
+  concurrency = concurrency || api.concurrency || 100
 
   if (pending.length === 0) throw new Error('No tests!')
   const _run = async node => {
