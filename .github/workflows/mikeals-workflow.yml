@@ -24,11 +24,10 @@ jobs:
       run: npm install
     - name: Test
       if: ${{ matrix.node-version == '14.x' }}
-      run: npm test
+      run: "npm run $(node -e \"console.log(require('./package.json').scripts['test:v14'] ? 'test:v14' : 'test')\")"
     - name: Test
       if: ${{ matrix.node-version == '12.x' }}
-      run: npm run $(node -e "console.log(require('./package.json').scripts['test:v12'] ? 'test:v1
-      2' : 'test')") 
+      run: "npm run $(node -e \"console.log(require('./package.json').scripts['test:v12'] ? 'test:v12' : 'test')\")"
   publish:
     name: Publish
     needs: test
