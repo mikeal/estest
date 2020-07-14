@@ -10,13 +10,13 @@ Deno, Browser[WIP], etc).
 ### Running in Node.js
 
 ```
-npx estest test/test-*.js
+npx estest test.js
 ```
 
 ### Running in Deno
 
 ```
-deno run --allow-read https://raw.githubusercontent.com/mikeal/estest/master/deno.js test/test-*.js
+deno run --allow-read https://raw.githubusercontent.com/mikeal/estest/master/deno.js test.js
 ```
 
 ## Test Authoring
