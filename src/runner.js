@@ -33,7 +33,15 @@ const runner = async api => {
   const create = ({ name, fn, filename, parent }) => {
     const test = (name, fn) => create({ name, fn, filename, parent: test })
     test.testName = name
-    test.fn = fn
+
+    const _after = []
+    const after = () => _after.forEach(resolve => resolve())
+    test.after = () => new Promise(resolve => _after.push(resolve))
+    test.fn = async (...args) => {
+      await fn(...args)
+      after()
+    }
+
     test.filename = filename
     test.parent = parent
     if (parent) {

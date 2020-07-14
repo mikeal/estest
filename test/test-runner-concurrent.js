@@ -16,4 +16,13 @@ export default async test => {
     await sleep(10)
     same(times.length, 2)
   })
+  let _complete = false
+  const _after = test('after begin', async test => {
+    await sleep(10)
+    _complete = true
+  }).after()
+  test('after complete', async () => {
+    await _after
+    same(_complete, true)
+  })
 }
