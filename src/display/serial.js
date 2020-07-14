@@ -58,5 +58,5 @@ export default argv => filename => {
   const onEnd = node => {
     // console.log(indent(node), node.testName, 'ended')
   }
-  return { filename, onStart, onEnd }
+  return { filename, onStart, onEnd, concurrency: 1 }
 }
