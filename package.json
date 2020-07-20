@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "bin": {
-    "estest": "./cjs.js"
+    "estest": "./cli.js"
   },
   "scripts": {
     "test:node": "node cli.js test/test-*.js",
