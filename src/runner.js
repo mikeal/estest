@@ -71,6 +71,7 @@ const runner = async api => {
   concurrency = concurrency || api.concurrency || 100
 
   if (pending.length === 0) throw new Error('No tests!')
+  let start = 0
   const _run = async node => {
     await onStart(node)
     let threw = true
@@ -83,10 +84,18 @@ const runner = async api => {
     if (!threw) await node.onPass()
     await onEnd(node)
     pending.splice(pending.indexOf(node), 1)
+    start--
   }
-  while (pending.length) {
-    const chunk = pending.slice(0, concurrency)
-    await Promise.all(chunk.map(_run))
+  const running = []
+  const wrap = node => {
+    const p = _run(node)
+    running.push(p)
+    p.then(() => running.splice(running.indexOf(p), 1))
+  }
+  while (pending.length || running.length) {
+    pending.slice(start, concurrency).forEach(wrap)
+    start += concurrency
+    await Promise.race(running)
     concurrency = 1
   }
 }
