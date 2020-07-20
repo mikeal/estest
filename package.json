@@ -1,9 +1,12 @@
 {
   "name": "estest",
   "version": "0.0.0-dev",
-  "description": "",
+  "description": "ESM native test system",
   "main": "index.js",
   "type": "module",
+  "bin": {
+    "estest": "./cjs.js"
+  },
   "scripts": {
     "test:node": "node cli.js test/test-*.js",
     "test:deno": "deno run --allow-read deno.js test/test-runner-concurrent.js",
