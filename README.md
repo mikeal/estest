@@ -56,6 +56,8 @@ export { tests }
 ```
 
 ### Object of tests (w/ names)
+
+```js
 const tests = {
  'first test!: async test => { /* passes */ },
  'first fail!': test => { throw new Error('Fail!') })
