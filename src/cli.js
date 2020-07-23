@@ -1,6 +1,7 @@
 import runner from './runner.js'
 import serialDisplay from './display/serial.js'
 import defaultDisplay from './display/index.js'
+import browser from './browser.js'
 
 const concurrency = 100
 
@@ -8,8 +9,11 @@ export default async argv => {
   const { files, stdout, cwd } = argv
   if (!files) throw new Error('No test files')
   let display = defaultDisplay
-  if (argv.b) {
+  if (argv.break) {
     display = serialDisplay
+  }
+  if (argv.browser) {
+    display = browser(display)
   }
   const run = await display(argv)
   const pending = new Set()
