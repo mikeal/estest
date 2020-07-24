@@ -9,7 +9,7 @@ function pathToFileURL (filepath, cwd) {
   let resolved
   if (filepath.startsWith('./')) filepath = filepath.slice(2)
   if (filepath.startsWith('/')) resolved = filepath
-  else resolved = cwd + '/' + filepath
+  else resolved = (cwd ? cwd : '') + '/' + filepath
 
   // path.resolve strips trailing slashes so we must add them back
   const filePathLast = filepath.charCodeAt(filepath.length - 1)
@@ -27,8 +27,7 @@ function pathToFileURL (filepath, cwd) {
 }
 
 const runner = async api => {
-  let { filename, onStart, onEnd, pipe, cwd } = api
-  if (!pipe) pipe = x => x
+  let { filename, onStart, onEnd, cwd, browser, concurrency } = api
   const pending = []
   const create = ({ name, fn, filename, parent }) => {
     const test = (name, fn) => create({ name, fn, filename, parent: test })
@@ -49,10 +48,15 @@ const runner = async api => {
     } else {
       pending.push(test)
     }
-    return pipe(test)
+    return test
   }
   if (!filename) throw new Error('No filename')
-  const url = pathToFileURL(filename, cwd)
+  let url
+  if (browser) {
+    url = '/_cwd/' + filename
+  } else {
+    url = pathToFileURL(filename, cwd)
+  }
   const module = { ...await import(url) }
   if (!module.default) module.default = module.test
   if (module.default) {
@@ -67,8 +71,7 @@ const runner = async api => {
     }
   }
 
-  let { concurrency } = module
-  concurrency = concurrency || api.concurrency || 100
+  concurrency = module.concurrency || concurrency || 100
 
   if (pending.length === 0) throw new Error('No tests!')
   let start = 0

@@ -13,7 +13,7 @@ export default async argv => {
     display = serialDisplay
   }
   if (argv.browser) {
-    display = browser(display)
+    display = await browser(display)
   }
   const run = await display(argv)
   const pending = new Set()
@@ -26,10 +26,14 @@ export default async argv => {
   }
   const errors = []
   const runFile = async filename => {
-    const opts = await run(filename)
-    await ring(runner({ ...opts, stdout, cwd }))
-    if (opts.errors) {
-      opts.errors.forEach(e => errors.push(e))
+    if (!browser) {
+      const opts = await run(filename)
+      await ring(runner({ ...opts, stdout, cwd }))
+      if (opts.errors) {
+        opts.errors.forEach(e => errors.push(e))
+      }
+    } else {
+      await ring(run(filename, errors))
     }
   }
   await Promise.race(files.splice(0, concurrency).map(runFile))
@@ -38,6 +42,7 @@ export default async argv => {
     await runFile(files.shift())
   }
   await Promise.all([...pending])
+  if (run.cleanup) await run.cleanup()
   if (display.cleanup) await display.cleanup(argv)
   if (errors.length) {
     console.error(errors.join('\n'))
