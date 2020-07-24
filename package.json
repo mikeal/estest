@@ -20,6 +20,7 @@
     "standard": "^14.3.4"
   },
   "dependencies": {
+    "puppeteer": "^5.2.1",
     "yargs": "^15.4.0"
   }
 }
