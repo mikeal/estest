@@ -8,8 +8,8 @@ const html = `<html><head><script type="module">
   const run = async () => {
     const runner = await import('/_dagdb/runner.js')
     const _onStart = async node => {
-      node.onPass = onPass
-      node.onFail = onFail
+      node.onPass = (...args) => onPass(node.testName, ...args)
+      node.onFail = (...args) => onFail(node.testName, ...args)
       await onStart({...node})
     }
     const api = { filename, onStart: _onStart, onEnd, pipe, cwd, browser, concurrency }

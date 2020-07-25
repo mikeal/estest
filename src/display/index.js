@@ -47,11 +47,11 @@ const display = argv => async filename => {
     started: 0
   }
   const errors = []
-  const onPass = testName => async () => {
+  const onPass = async (testName) => {
     line.passed += 1
     await write(line)
   }
-  const onFail = testName => async e => {
+  const onFail = async (testName, e) => {
     line.failed += 1
     errors.push(red(`${filename} ${testName} failed:`))
     errors.push(white(e.stack))
@@ -61,8 +61,8 @@ const display = argv => async filename => {
     line.running += 1
     line.started += 1
     const { testName } = node
-    node.onPass = onPass(testName)
-    node.onFail = onFail(testName)
+    node.onPass = (...args) => onPass(testName, ...args)
+    node.onFail = (...args) => onFail(testName, ...args)
     await write(line)
   }
   const onEnd = node => {
