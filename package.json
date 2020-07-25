@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "puppeteer": "^5.2.1",
+    "toulon": "0.0.0",
     "yargs": "^15.4.0"
   }
 }

@@ -1,4 +1,4 @@
-import toulon from '../../toulon/index.js'
+import toulon from 'toulon'
 import puppeteer from 'puppeteer'
 import { promises as fs } from 'fs'
 
