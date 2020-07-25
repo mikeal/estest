@@ -38,7 +38,7 @@ export default display => async argv => {
       res.end(f)
     }
   }
-  const browser = await toulon(puppeteer, {handler})
+  const browser = await toulon(puppeteer, { handler })
   const run = async (filename, errors) => {
     let finish
     let onError
@@ -49,14 +49,13 @@ export default display => async argv => {
       }
       // TODO: wire up reject to any fail major fail states
     })
-    const stubs = { pipe: x => x, concurrency: null }
+    const stubs = { pipe: x => x, concurrency: concurrency || null }
     const opts = await display(filename)
     const api = { ...stubs, ...opts, finish, browser: true, stdout: null }
     const onConsole = async msg => {
       const args = await Promise.all(msg.args().map(h => h.jsonValue().then(s => {
         if (typeof s === 'string') {
-          try { return JSON.parse(s) }
-          catch { }
+          try { return JSON.parse(s) } catch { }
         }
         return s
       })))
@@ -64,7 +63,7 @@ export default display => async argv => {
       if (type === 'error') return console.error(...args)
       console.log(...args)
     }
-    const tab = await browser.tab(html, onError, onConsole, api)
+    await browser.tab(html, onError, onConsole, api)
     await until
     if (opts.errors) opts.errors.forEach(e => errors.push(e))
   }

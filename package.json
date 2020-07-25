@@ -10,7 +10,8 @@
   "scripts": {
     "test:node": "node cli.js test/test-*.js",
     "test:deno": "deno run --allow-read deno.js test/test-runner-concurrent.js",
-    "test": "standard && npm run test:node"
+    "test:browser": "node cli.js --browser test/test-runner-concurrent.js",
+    "test": "standard && npm run test:node && npm run test:browser"
   },
   "keywords": [],
   "author": "Mikeal Rogers <mikeal.rogers@gmail.com> (https://www.mikealrogers.com/)",
