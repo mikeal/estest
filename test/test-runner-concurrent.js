@@ -17,12 +17,17 @@ export default async test => {
     same(times.length, 2)
   })
   let _complete = false
+  let _afterCalled = false
   const _after = test('after begin', async test => {
     await sleep(10)
     _complete = true
-  }).after()
+  }).after(() => { _afterCalled = true })
   test('after complete', async () => {
     await _after
     same(_complete, true)
+  })
+  test('after callback', async () => {
+    await _after
+    same(_afterCalled, true)
   })
 }

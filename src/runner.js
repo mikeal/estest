@@ -34,8 +34,21 @@ const runner = async api => {
     test.testName = name
 
     const _after = []
-    const after = () => _after.forEach(resolve => resolve())
-    test.after = () => new Promise(resolve => _after.push(resolve))
+    const _afterPromises = []
+    const after = async () => {
+      while (_after.length) {
+        const resolve = _after.shift()
+        const promise = _afterPromises.shift()
+        resolve(test)
+        await promise
+      }
+    }
+    test.after = fn => {
+      let p = new Promise(resolve => _after.push(resolve))
+      if (fn) p = p.then(test => fn(test))
+      _afterPromises.push(p)
+      return p
+    }
     test.fn = async (...args) => {
       await fn(...args)
       after()
