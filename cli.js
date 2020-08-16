@@ -1,4 +1,5 @@
-#!/usr/bin/env node
+#!/bin/sh
+':' // comment; exec /usr/bin/env node  --unhandled-rejections=strict "$0" "$@"
 import yargs from 'yargs'
 import run from './src/cli.js'
 
