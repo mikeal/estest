@@ -28,7 +28,7 @@ export default async argv => {
   const runFile = async filename => {
     if (!argv.browser) {
       const opts = await run(filename)
-      await ring(runner({ ...opts, stdout, cwd }))
+      await ring(runner({ ...opts, stdout, cwd, breakOnFail: argv.break || false }))
       if (opts.errors) {
         opts.errors.forEach(e => errors.push(e))
       }

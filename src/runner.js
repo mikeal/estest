@@ -27,7 +27,7 @@ function pathToFileURL (filepath, cwd) {
 }
 
 const runner = async api => {
-  let { filename, onStart, onEnd, cwd, browser, concurrency } = api
+  let { filename, onStart, onEnd, cwd, browser, concurrency, breakOnFail } = api
   const pending = []
   const create = ({ name, fn, filename, parent }) => {
     const test = (name, fn) => create({ name, fn, filename, parent: test })
@@ -56,7 +56,7 @@ const runner = async api => {
 
     test.filename = filename
     test.parent = parent
-    if (parent) {
+    if (parent && pending.indexOf(parent) !== -1) {
       pending.splice(pending.indexOf(parent), 0, test)
     } else {
       pending.push(test)
@@ -96,6 +96,7 @@ const runner = async api => {
       threw = false
     } catch (e) {
       await node.onFail(e)
+      if (breakOnFail) process.exit(1)
     }
     if (!threw) await node.onPass()
     await onEnd(node)
