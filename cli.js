@@ -1,7 +1,9 @@
 #!/bin/sh
 ':' // comment; exec /usr/bin/env node  --unhandled-rejections=strict "$0" "$@"
-import yargs from 'yargs'
+import { Yargs } from 'yargs'
 import run from './src/cli.js'
+
+const yargs = Yargs()
 
 const options = yargs => {
   yargs.positional('files', {
