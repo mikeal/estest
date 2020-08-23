@@ -6,7 +6,6 @@ import browser from './browser.js'
 const concurrency = 100
 
 export default async argv => {
-  console.log({argv})
   const { files, stdout, cwd } = argv
   if (!files) throw new Error('No test files')
   let display = defaultDisplay
