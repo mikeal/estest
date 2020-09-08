@@ -1,9 +1,7 @@
 #!/bin/sh
 ':' // comment; exec /usr/bin/env node  --unhandled-rejections=strict "$0" "$@"
-import { Yargs, getProcessArgvWithoutBin } from 'yargs'
+import yargs from 'yargs'
 import run from './src/cli.js'
-
-const yargs = Yargs(getProcessArgvWithoutBin())
 
 const options = yargs => {
   yargs.positional('files', {

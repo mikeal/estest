@@ -17,12 +17,12 @@
   "author": "Mikeal Rogers <mikeal.rogers@gmail.com> (https://www.mikealrogers.com/)",
   "license": "(Apache-2.0 AND MIT)",
   "devDependencies": {
-    "c8": "^7.2.1",
+    "c8": "^7.3.0",
     "standard": "^14.3.4"
   },
   "dependencies": {
     "puppeteer": "^5.2.1",
-    "toulon": "0.0.0",
-    "yargs": "^16.0.0-beta.0"
+    "toulon": "0.0.1",
+    "yargs": "^15.4.1"
   }
 }
