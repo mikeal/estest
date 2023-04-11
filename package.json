@@ -21,7 +21,7 @@
     "standard": "^14.3.4"
   },
   "dependencies": {
-    "puppeteer": "^5.2.1",
+    "puppeteer": "^19.8.5",
     "toulon": "0.0.1",
     "yargs": "^15.4.1"
   }
